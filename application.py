@@ -59,9 +59,13 @@ app.register_blueprint(calcul_impression_api)
 app.register_blueprint(calcul_historique_api)
 app.register_blueprint(auth_bp)
 
-@app.route('/')
+@app.route("/")
 def index():
-    return jsonify({"message": "Bienvenue sur l'API SP3D Billing!"})
+    return "Backend SP3D Billing API opérationnel !"
+
+@app.route('/favicon.ico')
+def favicon():
+    return '', 204
 
 @app.route('/api/debug/settings')
 def debug_settings():
