@@ -26,16 +26,20 @@ def admin_required(fn):
 
 @bp.route('/api/login', methods=['POST'])
 def login():
+    print('DEBUG: /api/login appelé')
     data = request.get_json()
     if not data or 'email' not in data or 'password' not in data:
+        print('DEBUG: Données manquantes ou invalides')
         return jsonify({'message': 'Email et mot de passe requis'}), 400
     email = data.get('email')
     password = data.get('password')
     user = User.query.filter_by(email=email).first()
     if not user or not check_password_hash(user.password_hash, password):
+        print('DEBUG: Email ou mot de passe incorrect')
         return jsonify({'message': 'Email ou mot de passe incorrect'}), 401
     import json
     access_token = create_access_token(identity=json.dumps({'id': user.id, 'role': user.role, 'email': user.email}))
+    print('DEBUG: Authentification réussie pour', email)
     return jsonify({
         'token': access_token,
         'email': user.email,
