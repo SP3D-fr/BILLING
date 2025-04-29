@@ -20,7 +20,10 @@ from werkzeug.security import generate_password_hash
 
 app = Flask(__name__)
 # CORS restreint à l'origine frontend
-CORS(app, resources={r"/api/*": {"origins": "http://localhost:3000"}})
+CORS(app, resources={r"/api/*": {"origins": [
+    "http://localhost:3000",
+    "https://billingfront.onrender.com"
+]}})
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///facturation.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
