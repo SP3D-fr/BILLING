@@ -27,6 +27,8 @@ def admin_required(fn):
 @bp.route('/api/login', methods=['POST'])
 def login():
     data = request.get_json()
+    if not data or 'email' not in data or 'password' not in data:
+        return jsonify({'message': 'Email et mot de passe requis'}), 400
     email = data.get('email')
     password = data.get('password')
     user = User.query.filter_by(email=email).first()
@@ -34,12 +36,11 @@ def login():
         return jsonify({'message': 'Email ou mot de passe incorrect'}), 401
     import json
     access_token = create_access_token(identity=json.dumps({'id': user.id, 'role': user.role, 'email': user.email}))
-    # Réponse claire et simple pour le frontend
     return jsonify({
         'token': access_token,
         'email': user.email,
         'role': user.role
-    })
+    }), 200
 
 @bp.route('/api/password-reset-request', methods=['POST'])
 def password_reset_request():
